@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>七夕礼物</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<style>
+    body {
+        text-align: center;
+        display: flex;
+        justify-content: center;
+    }
+
+    .button {
+        background-color: #4CAF50;
+        /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+    }
+
+    .bg {
+        background: url(img/bg.jpg);
+        background-size: cover;
+        position: fixed;
+        top: -20px;
+        left: -20px;
+        right: -20px;
+        bottom: -20px;
+        -webkit-filter: blur(15px);
+        filter: blur(15px);
+        z-index: -1;
+    }
+
+    .blockDiv {
+        margin-top: 12rem;
+        width: 12rem;
+        display: flex;
+        flex-wrap: wrap;
+        text-align: center;
+    }
+
+    .block {
+        width: calc(calc(100% / 3) - 10px);
+        margin: 5px;
+        height: 50px;
+        box-sizing: border-box;
+        border: 1px solid #000;
+        text-align: center;
+        background: rgb(0, 0, 0);
+        border-radius:5px
+    }
+
+    .red {
+        border: 1px solid red;
+        background: red;
+    }
+    p{
+            margin:auto auto;
+            align-items: center;
+    }
+</style>
+
+<body>
+    <div class='bg'></div>
+    <div id="app">
+        <div class="blockDiv">
+            <div class='block' :class="{ red:changeRed == index}" v-for="(item,index) in items">
+              <p> {{ item }}</p>
+            </div>
+
+        </div>
+        <button class='button' @click='runit'>{{ btntext }}</button>
+
+    </div>
+</body>
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            items: [
+                '口红',
+                '包包',
+                '项链',
+                '耳环',
+                '戒指',
+                '手镯',
+                '么么哒',
+                '汉服',
+                '簪子'
+            ],
+            changeRed: -1,
+            btntext: "抽奖",
+            randoing: null,
+            idx: 0,
+            stoping: false
+        },
+        methods: {
+            runit() {
+                if (this.btntext === '停止') {
+                    if (this.stoping) {
+                        return;
+                    }
+                    setTimeout(() => {
+                        clearInterval(this.randoing)
+
+                        this.btntext = '开始'
+                        let p = this.idx - 1;
+                        if (this.idx - 1 < 0) {
+                            p = 0
+                        }
+                        alert('恭喜你获得了:' + this.items[p])
+                        this.stoping = false;
+                    }, 2000)
+                    this.stoping = true;
+
+                } else {
+
+                    this.randoing = setInterval(() => {
+
+                        this.change(this.idx)
+                        this.idx++
+                        if (this.idx >= this.items.length) {
+                            this.idx = 0
+                        }
+                    }, 200)
+                    this.btntext = '停止'
+                }
+
+            },
+            change(index) {
+                this.changeRed = index;
+            }
+
+        }
+    })
+</script>
+
+</html>
